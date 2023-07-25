@@ -9,6 +9,11 @@ app = Flask(__name__)
 # stores = [{"name": "My Store", "items": [{"name": "Chair", "price": 15.99}]}]
 
 
+@app.get("/test")
+def get_index():
+    return {"message": "kurwa mac jestem w domu"}
+
+
 @app.get("/store")
 def get_stores():
     return {"stores": list(stores.values())}
@@ -33,7 +38,7 @@ def create_todo():
     for todo in todos.values():
         if (
             todo["store_id"] == todo_data["store_id"]
-            and todo["name"] == todo_data["task"]
+            and todo["task"] == todo_data["task"]
         ):
             abort(400, message="Item already exists")
 
