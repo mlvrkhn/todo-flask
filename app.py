@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.get("/test")
 def get_index():
-    return {"message": "kurwa mac jestem w domu"}
+    return {"message": "testing going on..."}
 
 
 @app.get("/store")
