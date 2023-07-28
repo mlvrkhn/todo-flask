@@ -1,7 +1,8 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from db import stores
+
+# from db import stores
 
 bp = Blueprint("stores", __name__, description="Operations on stores")
 
