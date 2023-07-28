@@ -1,9 +1,9 @@
-# from sqlalchemy import Column, Integer, String, ForeignKey
-# from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from db import db
 
 
-class User(db.Model):
+class UserModel(db.Model):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)

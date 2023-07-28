@@ -3,7 +3,6 @@ from flask_smorest import Api
 
 from resources.habit import bp as HabitBlueprint
 from resources.user import bp as UserBlueprint
-from resources.store import bp as StoreBlueprint
 
 
 app = Flask(__name__)
@@ -20,4 +19,3 @@ api = Api(app)
 
 api.register_blueprint(HabitBlueprint)
 api.register_blueprint(UserBlueprint)
-api.register_blueprint(StoreBlueprint)

@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "YourPostmanIdHere",
+		"name": "Habit Tracker API",
+		"description": "Endpoints for managing users and habits in the Habit Tracker API."
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"url": "{{base_url}}/users/register",
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"your_username\",\n\t\"email\": \"your_email@example.com\",\n\t\"password\": \"your_password\"\n}"
+						},
+						"description": "Registers a new user with the Habit Tracker API."
+					}
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"url": "{{base_url}}/users/login",
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"your_email@example.com\",\n\t\"password\": \"your_password\"\n}"
+						},
+						"description": "Logs in a user to the Habit Tracker API and provides an access token."
+					}
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"url": "{{base_url}}/users/profile",
+						"method": "GET",
+						"description": "Retrieves the profile of the authenticated user."
+					}
+				}
+			]
+		},
+		{
+			"name": "Habits",
+			"item": [
+				{
+					"name": "Create Habit",
+					"request": {
+						"url": "{{base_url}}/habits",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "Bearer token obtained from login."
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"habit_name\",\n\t\"description\": \"habit_description\",\n\t\"start_date\": \"YYYY-MM-DD\"\n}"
+						},
+						"description": "Creates a new habit for the authenticated user."
+					}
+				},
+				{
+					"name": "Get All Habits",
+					"request": {
+						"url": "{{base_url}}/habits",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "Bearer token obtained from login."
+							}
+						],
+						"description": "Retrieves all habits of the authenticated user."
+					}
+				},
+				{
+					"name": "Get Habit by ID",
+					"request": {
+						"url": "{{base_url}}/habits/{{habit_id}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"description": "Bearer token obtained from login."
+							}
+						],
+						"description": "Retrieves a specific habit by its ID."
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"id": "base_url",
+			"key": "base_url",
+			"value": "http://your-api-url.com",
+			"description": "Your Habit Tracker API base URL."
+		},
+		{
+			"id": "access_token",
+			"key": "access_token",
+			"value": "",
+			"description": "Access token obtained from login."
+		},
+		{
+			"id": "habit_id",
+			"key": "habit_id",
+			"value": "1",
+			"description": "ID of the habit to retrieve."
+		}
+	],
+	"protocolProfileBehavior": {}
+}
