@@ -1,4 +1,6 @@
 from db import db
+from sqlalchemy.orm import relationship
+from models import DailyRecordModel
 
 
 class HabitModel(db.Model):
@@ -13,7 +15,7 @@ class HabitModel(db.Model):
 
     # Define a one-to-many relationship with DailyRecord
     records = relationship(
-        "DailyRecordModel", back_populates="habit", cascade="all, delete-orphan"
+        DailyRecordModel, back_populates="habit", cascade="all, delete-orphan"
     )
 
     def __repr__(self):
