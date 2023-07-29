@@ -7,21 +7,17 @@ import uuid
 
 bp = Blueprint("user", __name__, description="Operations on users")
 
-users = {
-    "6": {
-        "id": 6,
-        "username": "JEDZENIE",
-    }
-}
+users = {}
 
 
 @bp.route("/users")
 class Users(MethodView):
+    @bp.response(200, UserSchema(many=True))
     def get(self):
         try:
-            return {"users": users}
+            return users.values()
         except KeyError:
-            abort(404, message="User dont 't exist")
+            abort(404, message="Users dont 't exist")
 
     @bp.arguments(UserSchema)
     def post(self, user_data):
@@ -35,7 +31,7 @@ class Users(MethodView):
             abort(404, message="User dont't exist")
 
 
-@bp.route("/users/<int:user_id>")
+@bp.route("/users/<string:user_id>")
 class User(MethodView):
     def get(self, user_id):
         try:
@@ -44,8 +40,17 @@ class User(MethodView):
             abort(404, message="User {} doesn't exist".format(user_id))
 
     @bp.arguments(UserSchema)
-    def put(self, user_data):
-        print("user_data", user_data)
+    def put(self, user_data, user_id):
+        print("user_data", user_data, user_id)
+        try:
+            users[user_id] = user_data
+            return users[user_id], 200
+        except KeyError:
+            abort(404, message="User {} doesn't exist".format(user_id))
 
     def delete(self, user_id):
-        pass
+        try:
+            del users[user_id]
+            return "", 204
+        except KeyError:
+            abort(404, message="User not found")
