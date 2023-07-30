@@ -2,19 +2,21 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db import db
 
-from models import Habit
+from models import HabitModel
 
 
 class UserModel(db.Model):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(100), unique=True, nullable=False)
-    email = Column(String(100), unique=True, nullable=False)
-    password = Column(String(255), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
     # Define a one-to-many relationship with Habit
-    habits = relationship(Habit, back_populates="user", cascade="all, delete-orphan")
+    habits = db.relationship(
+        "HabitModel", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User(username='{self.username}', email='{self.email}')>"

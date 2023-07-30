@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import UserSchema
+from schemas import PlainUserSchema, UserSchema
 import uuid
 
 
@@ -12,14 +12,14 @@ users = {}
 
 @bp.route("/users")
 class Users(MethodView):
-    @bp.response(200, UserSchema(many=True))
+    @bp.response(200, PlainUserSchema(many=True))
     def get(self):
         try:
             return users.values()
         except KeyError:
             abort(404, message="Users dont 't exist")
 
-    @bp.arguments(UserSchema)
+    @bp.arguments(PlainUserSchema)
     @bp.response(201, UserSchema)
     def post(self, user_data):
         try:
@@ -34,14 +34,14 @@ class Users(MethodView):
 
 @bp.route("/users/<string:user_id>")
 class User(MethodView):
-    @bp.response(200, UserSchema)
+    @bp.response(200, PlainUserSchema)
     def get(self, user_id):
         try:
             return users[user_id]
         except KeyError:
             abort(404, message="User {} doesn't exist".format(user_id))
 
-    @bp.arguments(UserSchema)
+    @bp.arguments(PlainUserSchema)
     @bp.response(200, UserSchema)
     def put(self, user_data, user_id):
         print("user_data", user_data, user_id)

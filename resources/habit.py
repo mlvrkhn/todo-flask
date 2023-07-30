@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import HabitSchema
+from schemas import PlainHabitSchema, HabitSchema
 
 bp = Blueprint("habit", __name__, description="Operations on habits")
 
@@ -17,7 +17,7 @@ class Habit(MethodView):
         except KeyError:
             abort(404, message="Users dont 't exist")
 
-    @bp.arguments(HabitSchema)
+    @bp.arguments(PlainHabitSchema)
     @bp.response(201, HabitSchema)
     def post(self, habit_data):
         try:
@@ -38,13 +38,12 @@ class Habit(MethodView):
         except KeyError:
             abort(404, message="Habit {} doesn't exist".format(habit_id))
 
-    @bp.arguments(HabitSchema)
+    @bp.arguments(PlainHabitSchema)
     @bp.response(200, HabitSchema)
     def post(self, habit_data):
         print("habit_data", habit_data)
         # TOOD
 
-    @bp.response(200)
     def delete(self, habit_id):
         try:
             del habits[habit_id]

@@ -1,21 +1,22 @@
 from db import db
 from sqlalchemy.orm import relationship
-from models import DailyRecordModel
+
+# from models import DailyRecordModel
 
 
 class HabitModel(db.Model):
     __tablename__ = "habits"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    name = Column(String(100), unique=true, nullable=False)
-    description = Column(String(255))
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    description = db.Column(db.String(255))
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
 
     # Define a one-to-many relationship with DailyRecord
-    records = relationship(
-        DailyRecordModel, back_populates="habit", cascade="all, delete-orphan"
+    records = db.relationship(
+        "DailyRecordModel", back_populates="habit", cascade="all, delete-orphan"
     )
 
     def __repr__(self):
