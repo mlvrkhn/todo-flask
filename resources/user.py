@@ -46,11 +46,18 @@ class User(MethodView):
     @bp.arguments(PlainUserSchema)
     @bp.response(200, UserSchema)
     def put(self, user_data, user_id):
-        try:
-            users[user_id] = user_data
-            return users[user_id], 200
-        except KeyError:
-            abort(404, message="User {} doesn't exist".format(user_id))
+        user = UserModel.query.get_or_404(user_id)
+        if user:
+            user.username = user_data["username"]
+            user.email = user_data["email"]
+            user.password = user_data["password"]
+        else:
+            item = UserModel(**user_data)
+
+        db.session.add(user)
+        db.session.commit()
+
+        return user
 
     @bp.response(200)
     def delete(self, user_id):
