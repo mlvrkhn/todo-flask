@@ -17,10 +17,7 @@ bp = Blueprint("user", __name__, description="Operations on users")
 class Users(MethodView):
     @bp.response(200, UserSchema(many=True))
     def get(self):
-        try:
-            return UserModel.query.all()
-        except KeyError:
-            abort(404, message="Users dont 't exist")
+        return UserModel.query.all()
 
     @bp.arguments(UserSchema)
     @bp.response(201, UserSchema)
@@ -39,20 +36,20 @@ class Users(MethodView):
 
 @bp.route("/users/<string:user_id>")
 class User(MethodView):
-    @bp.response(200, PlainUserSchema)
+    @bp.response(200, UserSchema)
     def get(self, user_id):
         return UserModel.query.get_or_404(user_id)
 
     @bp.arguments(PlainUserSchema)
     @bp.response(200, UserSchema)
     def put(self, user_data, user_id):
-        user = UserModel.query.get_or_404(user_id)
+        user = UserModel.query.get(user_id)
         if user:
             user.username = user_data["username"]
             user.email = user_data["email"]
             user.password = user_data["password"]
         else:
-            item = UserModel(**user_data)
+            item = UserModel(id=user_id, **user_data)
 
         db.session.add(user)
         db.session.commit()

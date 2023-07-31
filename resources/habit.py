@@ -2,31 +2,35 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import PlainHabitSchema, HabitSchema
+from models import HabitModel
+
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+
+from db import db
 
 bp = Blueprint("habit", __name__, description="Operations on habits")
-
-habits = {}
 
 
 @bp.route("/habits")
 class Habit(MethodView):
     @bp.response(200, HabitSchema(many=True))
     def get(self):
-        try:
-            return habits.values()
-        except KeyError:
-            abort(404, message="Users dont 't exist")
+        return HabitModel.query.all()
 
-    @bp.arguments(PlainHabitSchema)
+    @bp.arguments(HabitSchema)
     @bp.response(201, HabitSchema)
     def post(self, habit_data):
         try:
-            habit_id = uuid.uuid4().hex
-            habit_data = {"id": habit_id, **habit_data}
-            habits[habit_id] = habit_data
-            return habit_data, 201
-        except KeyError:
-            abort(404, message="Habit dont't exist")
+            habit = HabitModel(**habit_data)
+            print("🚀   habit:", habit)
+            db.session.add(habit)
+            db.session.commit()
+        except IntegrityError:
+            abort(400, message="Habit already exists")
+        except SQLAlchemyError:
+            abort(500, message="Error occured while creating habit")
+
+        return habit
 
 
 @bp.route("/habits/<string:habit_id>")

@@ -16,7 +16,7 @@ class PlainHabitSchema(Schema):
     user_id = fields.Int(required=True)
     name = fields.Str(required=True)
     description = fields.Str()
-    start_date = fields.Date(required=True)
+    start_date = fields.Date()
     end_date = fields.Date()
 
 

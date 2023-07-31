@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 # from models import DailyRecordModel
 
@@ -8,11 +9,11 @@ class HabitModel(db.Model):
     __tablename__ = "habits"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey("users.id"), nullable=False)
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(255))
-    start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.Date, nullable=True, default=datetime.utcnow)
+    # end_date = db.Column(db.Date)
 
     user = db.relationship("UserModel", back_populates="habits")
     records = db.relationship(

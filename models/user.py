@@ -2,8 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from db import db
 
-from models import HabitModel
-
 
 class UserModel(db.Model):
     __tablename__ = "users"
