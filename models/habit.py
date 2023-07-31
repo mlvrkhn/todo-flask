@@ -14,7 +14,7 @@ class HabitModel(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date)
 
-    # Define a one-to-many relationship with DailyRecord
+    user = db.relationship("UserModel", back_populates="habits")
     records = db.relationship(
         "DailyRecordModel", back_populates="habit", cascade="all, delete-orphan"
     )
