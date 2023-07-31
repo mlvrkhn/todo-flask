@@ -49,8 +49,10 @@ class Habit(MethodView):
         # TOOD
 
     def delete(self, habit_id):
-        try:
-            del habits[habit_id]
-            return "", 204
-        except KeyError:
+        habit = HabitModel.query.get(habit_id)
+        if habit:
+            db.session.delete(habit)
+            db.session.commit()
+            return {"message": "Habit deleted successfully"}
+        else:
             abort(404, message="Habit not found")

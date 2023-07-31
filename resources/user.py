@@ -56,10 +56,11 @@ class User(MethodView):
 
         return user
 
-    @bp.response(200)
     def delete(self, user_id):
-        try:
-            del users[user_id]
-            return "", 204
-        except KeyError:
+        user = UserModel.query.get(user_id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return {"message": "User deleted successfully"}
+        else:
             abort(404, message="User not found")

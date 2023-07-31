@@ -2,8 +2,6 @@ from db import db
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-# from models import DailyRecordModel
-
 
 class HabitModel(db.Model):
     __tablename__ = "habits"
