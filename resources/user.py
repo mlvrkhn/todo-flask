@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import PlainUserSchema, UserSchema
+from schemas import PlainUserSchema, UserSchema, HabitSchema
 
 import uuid
 
@@ -64,3 +64,14 @@ class User(MethodView):
             return {"message": "User deleted successfully"}
         else:
             abort(404, message="User not found")
+
+
+@bp.route("/users/<string:user_id>/habits")
+class User(MethodView):
+    @bp.response(200, HabitSchema(many=True))
+    def get(self, user_id):
+        try:
+            user = UserModel.query.get(user_id)
+            return user.habits
+        except KeyError:
+            abort(404, message="Habits for {} don't exist".format(user_id))
