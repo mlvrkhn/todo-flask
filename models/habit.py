@@ -15,7 +15,7 @@ class HabitModel(db.Model):
 
     user = db.relationship("UserModel", back_populates="habits")
     records = db.relationship(
-        "DailyRecordModel", back_populates="habit", cascade="all, delete-orphan"
+        "HabitCompletionModel", back_populates="habit", cascade="all, delete"
     )
 
     def __repr__(self):

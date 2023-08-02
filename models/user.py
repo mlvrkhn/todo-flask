@@ -13,7 +13,7 @@ class UserModel(db.Model):
 
     # Define a one-to-many relationship with Habit
     habits = db.relationship(
-        "HabitModel", back_populates="user", cascade="all, delete-orphan"
+        "HabitModel", back_populates="user", cascade="all, delete", lazy="dynamic"
     )
 
     def __repr__(self):
