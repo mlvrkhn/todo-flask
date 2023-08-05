@@ -11,4 +11,4 @@ class HabitCompletionModel(db.Model):
     habit = relationship("HabitModel", back_populates="completions")
 
     def __repr__(self):
-        return f"<HabitCompletionModel(date='{self.date}', is_completed='{self.is_completed}')>"
+        return f"<HabitCompletionModel(completion_date='{self.completion_date}')>"

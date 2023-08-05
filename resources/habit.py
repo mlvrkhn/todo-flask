@@ -22,7 +22,6 @@ class Habit(MethodView):
     def post(self, habit_data):
         try:
             habit = HabitModel(**habit_data)
-            print("🚀   habit:", habit)
             db.session.add(habit)
             db.session.commit()
         except IntegrityError:

@@ -5,8 +5,6 @@ from datetime import datetime
 class PlainDailyRecordSchema(Schema):
     habit_id = fields.Int(required=True)
     date = fields.Date(required=True)
-    # is_completed = fields.Boolean(missing=False)
-    notes = fields.Str()
 
 
 class DailyRecordSchema(PlainDailyRecordSchema):
