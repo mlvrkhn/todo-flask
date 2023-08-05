@@ -43,7 +43,7 @@ class User(MethodView):
     @bp.arguments(PlainUserSchema)
     @bp.response(200, UserSchema)
     def put(self, user_data, user_id):
-        user = UserModel.query.get(user_id)
+        user = UserModel.get_by_id(user_id)
         if user:
             user.username = user_data["username"]
             user.email = user_data["email"]

@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields
+from datetime import datetime
 
 
 class PlainDailyRecordSchema(Schema):
@@ -26,6 +27,11 @@ class HabitSchema(PlainHabitSchema):
     # records = fields.Nested(PlainDailyRecordSchema(), many=True, exclude=("habit",))
 
 
+class UpdateHabitSchema(Schema):
+    name = fields.Str()
+    description = fields.Str()
+
+
 class PlainUserSchema(Schema):
     username = fields.Str(required=True)
     email = fields.Email(required=True)
@@ -37,18 +43,10 @@ class UserSchema(PlainUserSchema):
     habits = fields.List(fields.Nested(PlainHabitSchema()), dump_only=True)
 
 
-# class HabitUpdateSchema(Schema):
-#     id = fields.Int(dump_only=True)
-#     user_id = fields.Int(required=True)
-#     name = fields.Str(required=True)
-#     description = fields.Str()
-#     start_date = fields.Date(required=True)
-#     end_date = fields.Date()
-#     records = fields.Nested(DailyRecordSchema, many=True, exclude=("habit",))
+class PlainHabitCompletionSchema(Schema):
+    habit_id = fields.Str(required=True)
+    completion_date = fields.Date(default=datetime.utcnow)
 
-# class UpdateUserSchema(Schema):
-#     id = fields.Int(dump_only=True)
-#     username = fields.Str(required=True)
-#     email = fields.Email(required=True)
-#     password = fields.Str(required=True, load_only=True)
-#     habits = fields.Nested("HabitSchema", many=True, exclude=("user",))
+
+class HabitCompletionSchema(PlainHabitCompletionSchema):
+    id = fields.Int(dump_only=True)

@@ -14,9 +14,7 @@ class HabitModel(db.Model):
     # end_date = db.Column(db.Date)
 
     user = db.relationship("UserModel", back_populates="habits")
-    records = db.relationship(
-        "HabitCompletionModel", back_populates="habit", cascade="all, delete"
-    )
+    completions = relationship("HabitCompletionModel", back_populates="habit")
 
     def __repr__(self):
         return f"<HabitModel(name='{self.name}', user_id='{self.user_id}', start_date='{self.start_date}')>"

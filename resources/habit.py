@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import PlainHabitSchema, HabitSchema
+from schemas import PlainHabitSchema, HabitSchema, UpdateHabitSchema
 from models import HabitModel
 
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -37,16 +37,21 @@ class Habit(MethodView):
 class Habit(MethodView):
     @bp.response(200, HabitSchema)
     def get(self, habit_id):
-        try:
-            return habits[habit_id]
-        except KeyError:
-            abort(404, message="Habit {} doesn't exist".format(habit_id))
+        return HabitModel.query.get_or_404(habit_id)
 
-    @bp.arguments(PlainHabitSchema)
+    @bp.arguments(UpdateHabitSchema)
     @bp.response(200, HabitSchema)
-    def post(self, habit_data):
-        print("habit_data", habit_data)
-        # TOOD
+    def put(self, update_data, habit_id):
+        try:
+            habit = HabitModel.query.get(habit_id)
+            if habit is None:
+                abort(404, message="Item not found.")
+            for key, value in update_data.items():
+                setattr(habit, key, value)
+            db.session.commit()
+            return habit
+        except SQLAlchemyError:
+            abort(500, message="Error updating item.")
 
     def delete(self, habit_id):
         habit = HabitModel.query.get(habit_id)

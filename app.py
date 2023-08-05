@@ -6,6 +6,7 @@ import models
 
 from resources.habit import bp as HabitBlueprint
 from resources.user import bp as UserBlueprint
+from resources.habit_completion import bp as HabitCompletionBlueprint
 
 
 def create_app(db_url=None):
@@ -34,5 +35,6 @@ def create_app(db_url=None):
 
     api.register_blueprint(HabitBlueprint)
     api.register_blueprint(UserBlueprint)
+    api.register_blueprint(HabitCompletionBlueprint)
 
     return app
