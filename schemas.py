@@ -4,7 +4,7 @@ from datetime import datetime
 
 class PlainDailyRecordSchema(Schema):
     habit_id = fields.Int(required=True)
-    date = fields.Date(required=True)
+    completion_date = fields.Date(required=True)
 
 
 class DailyRecordSchema(PlainDailyRecordSchema):
@@ -21,7 +21,7 @@ class PlainHabitSchema(Schema):
 
 class HabitSchema(PlainHabitSchema):
     id = fields.Int(dump_only=True)
-    records = fields.Nested(PlainDailyRecordSchema(), many=True)
+    completions = fields.Nested(DailyRecordSchema(), many=True)
     # records = fields.Nested(PlainDailyRecordSchema(), many=True, exclude=("habit",))
 
 

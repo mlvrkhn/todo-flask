@@ -16,5 +16,9 @@ class UserModel(db.Model):
         "HabitModel", back_populates="user", cascade="all, delete", lazy="dynamic"
     )
 
+    @classmethod
+    def find_by_user_id(cls, user_id):
+        return cls.query.filter_by(id=user_id).first()
+
     def __repr__(self):
         return f"<User(username='{self.username}', email='{self.email}')>"

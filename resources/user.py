@@ -38,7 +38,8 @@ class Users(MethodView):
 class User(MethodView):
     @bp.response(200, UserSchema)
     def get(self, user_id):
-        return UserModel.query.get_or_404(user_id)
+        # return UserModel.query.get_or_404(user_id)
+        return UserModel.find_by_user_id(user_id)
 
     @bp.arguments(PlainUserSchema)
     @bp.response(200, UserSchema)
