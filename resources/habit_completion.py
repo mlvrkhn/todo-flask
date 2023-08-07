@@ -44,25 +44,20 @@ class HabitCompletion(MethodView):
         return new_completion
 
 
-@bp.route("/completions/<string:completion_id>", methods=["GET", "POST"])
+@bp.route("/completions/<string:completion_id>")
 class HabitCompletion(MethodView):
-    @bp.response(200, HabitCompletionSchema(many=True))
+    @bp.response(200, HabitCompletionSchema)
     def get(self, completion_id):
         return HabitCompletionModel.query.get_or_404(completion_id)
 
     @bp.arguments(PlainHabitCompletionSchema)
     @bp.response(201, HabitCompletionSchema)
-    def post(self, habit_completion_data, completion_id):
+    def put(self, habit_completion_data, completion_id):
+        new_completion = HabitCompletionModel(**habit_completion_data)
         try:
-            # if "completion_date" not in habit_completion_data:
-            new_completion = HabitCompletionModel(**habit_completion_data)
             db.session.add(new_completion)
             db.session.commit()
         except SQLAlchemyError:
             abort(404, message="Habit not found")
-        # except Exception as e:
-        #     db.session.rollback()
-        #     print("🚀   e:", e)
-        #     abort(404, message="An error occured while creating habit completion")
 
         return new_completion
