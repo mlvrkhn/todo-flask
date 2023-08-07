@@ -22,8 +22,8 @@ class Users(MethodView):
     @bp.arguments(UserSchema)
     @bp.response(201, UserSchema)
     def post(self, user_data):
+        user = UserModel(**user_data)
         try:
-            user = UserModel(**user_data)
             db.session.add(user)
             db.session.commit()
         except IntegrityError:

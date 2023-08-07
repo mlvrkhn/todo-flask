@@ -13,7 +13,7 @@ class HabitModel(db.Model):
     start_date = db.Column(db.Date, nullable=True, default=datetime.utcnow)
     # end_date = db.Column(db.Date)
 
-    user = db.relationship("UserModel", back_populates="habits")
+    user = relationship("UserModel", back_populates="habits")
     completions = relationship("HabitCompletionModel", back_populates="habit")
 
     def __repr__(self):

@@ -38,7 +38,7 @@ class PlainUserSchema(Schema):
 
 class UserSchema(PlainUserSchema):
     id = fields.Str(dump_only=True)
-    habits = fields.List(fields.Nested(PlainHabitSchema()), dump_only=True)
+    habits = fields.List(fields.Nested(HabitSchema()))
 
 
 class PlainHabitCompletionSchema(Schema):

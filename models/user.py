@@ -12,7 +12,7 @@ class UserModel(db.Model):
     password = db.Column(db.String(255), nullable=False)
 
     # Define a one-to-many relationship with Habit
-    habits = db.relationship(
+    habits = relationship(
         "HabitModel", back_populates="user", cascade="all, delete", lazy="dynamic"
     )
 
