@@ -15,14 +15,13 @@ class PlainHabitSchema(Schema):
     user_id = fields.Int(required=True)
     name = fields.Str(required=True)
     description = fields.Str()
-    start_date = fields.Date()
-    end_date = fields.Date()
+    time_created = fields.Date()
+    time_updated = fields.Date()
 
 
 class HabitSchema(PlainHabitSchema):
     id = fields.Int(dump_only=True)
     completions = fields.Nested(DailyRecordSchema(), many=True)
-    # records = fields.Nested(PlainDailyRecordSchema(), many=True, exclude=("habit",))
 
 
 class UpdateHabitSchema(Schema):

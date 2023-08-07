@@ -1,5 +1,6 @@
 from db import db
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from datetime import datetime
 
 
@@ -10,8 +11,8 @@ class HabitModel(db.Model):
     user_id = db.Column(db.String, db.ForeignKey("users.id"), nullable=False)
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(255))
-    start_date = db.Column(db.Date, nullable=True, default=datetime.utcnow)
-    # end_date = db.Column(db.Date)
+    time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    time_updated = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
     user = relationship("UserModel", back_populates="habits")
     completions = relationship("HabitCompletionModel", back_populates="habit")
