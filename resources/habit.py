@@ -3,6 +3,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import PlainHabitSchema, HabitSchema, UpdateHabitSchema
 from models import HabitModel
+from flask_jwt_extended import jwt_required
 
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -17,6 +18,7 @@ class Habit(MethodView):
     def get(self):
         return HabitModel.query.all()
 
+    @jwt_required()
     @bp.arguments(HabitSchema)
     @bp.response(201, HabitSchema)
     def post(self, habit_data):

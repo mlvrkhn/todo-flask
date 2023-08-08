@@ -3,9 +3,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import PlainUserSchema, UserSchema, HabitSchema, LoginSchema
 from passlib.hash import pbkdf2_sha256 as sha256
-from flask_jwt_extended import create_access_token
-
-import uuid
+from flask_jwt_extended import create_access_token, jwt_required
 
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
