@@ -40,6 +40,7 @@ class Habit(MethodView):
     def get(self, habit_id):
         return HabitModel.query.get_or_404(habit_id)
 
+    @jwt_required()
     @bp.arguments(UpdateHabitSchema)
     @bp.response(200, HabitSchema)
     def put(self, update_data, habit_id):
@@ -54,6 +55,7 @@ class Habit(MethodView):
         except SQLAlchemyError:
             abort(500, message="Error updating item.")
 
+    @jwt_required()
     def delete(self, habit_id):
         habit = HabitModel.query.get(habit_id)
         if habit:
