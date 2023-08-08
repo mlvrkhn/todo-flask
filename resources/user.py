@@ -2,6 +2,7 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import PlainUserSchema, UserSchema, HabitSchema
+from passlib.hash import pbkdf2_sha256 as sha256
 
 import uuid
 
@@ -13,58 +14,38 @@ from db import db
 bp = Blueprint("user", __name__, description="Operations on users")
 
 
-@bp.route("/users")
-class Users(MethodView):
-    @bp.response(200, UserSchema(many=True))
-    def get(self):
-        return UserModel.query.all()
-
+@bp.route("/register")
+class UserRegister(MethodView):
     @bp.arguments(UserSchema)
-    @bp.response(201, UserSchema)
     def post(self, user_data):
-        user = UserModel(**user_data)
-        try:
-            db.session.add(user)
-            db.session.commit()
-        except IntegrityError:
-            abort(400, message="User already exists")
-        except SQLAlchemyError:
-            abort(500, message="Error occured while creating user")
+        if UserModel.query.filter(UserModel.username == user_data["username"]).first():
+            abort(409, message="A user with that username already exists.")
 
-        return user
+        user = UserModel(
+            username=user_data["username"],
+            email=user_data["email"],
+            password=sha256.hash(user_data["password"]),
+        )
 
-
-@bp.route("/users/<string:user_id>")
-class User(MethodView):
-    @bp.response(200, UserSchema)
-    def get(self, user_id):
-        # return UserModel.query.get_or_404(user_id)
-        return UserModel.find_by_user_id(user_id)
-
-    @bp.arguments(PlainUserSchema)
-    @bp.response(200, UserSchema)
-    def put(self, user_data, user_id):
-        user = UserModel.get_by_id(user_id)
-        if user:
-            user.username = user_data["username"]
-            user.email = user_data["email"]
-            user.password = user_data["password"]
-        else:
-            item = UserModel(id=user_id, **user_data)
+        print("user: ", user)
 
         db.session.add(user)
         db.session.commit()
 
-        return user
+        return {"message": "User created successfully."}, 201
+
+
+@bp.route("/users/<int:user_id>")
+class User(MethodView):
+    @bp.response(200, UserSchema)
+    def get(self, user_id):
+        return UserModel.find_by_user_id(user_id)
 
     def delete(self, user_id):
-        user = UserModel.query.get(user_id)
-        if user:
-            db.session.delete(user)
-            db.session.commit()
-            return {"message": "User deleted successfully"}
-        else:
-            abort(404, message="User not found")
+        user = UserModel.get_or_404(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return {"message": "User deleted successfully"}
 
 
 @bp.route("/users/<string:user_id>/habits")

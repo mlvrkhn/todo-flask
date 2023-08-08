@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_smorest import Api
-
+from flask_jwt_extended import JWTManager
 from db import db
 import models
 
@@ -25,10 +25,14 @@ def create_app(db_url=None):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
+    app.config["JWT_SECRET_KEY"] = "3908982254207764219527071196126709504"
+    jwt = JWTManager(app)
+
     api = Api(app)
 
     with app.app_context():
         db.create_all()
+
     # @app.before_first_request
     # def create_tables():
     #     db.create_all()
