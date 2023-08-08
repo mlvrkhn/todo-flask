@@ -3,7 +3,12 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from schemas import PlainUserSchema, UserSchema, HabitSchema, LoginSchema
 from passlib.hash import pbkdf2_sha256 as sha256
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt
+from flask_jwt_extended import (
+    create_access_token,
+    jwt_required,
+    get_jwt,
+    create_refresh_token,
+)
 
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -42,7 +47,8 @@ class UserLogin(MethodView):
 
         if user and sha256.verify(user_data["password"], user.password):
             access_token = create_access_token(identity=user.id, fresh=True)
-            return {"access_token": access_token}, 200
+            refresh_token = create_refresh_token(identity=user.id)
+            return {"access_token": access_token, "refresh_token": refresh_token}, 200
         else:
             abort(401, message="Invalid credentials.")
 
