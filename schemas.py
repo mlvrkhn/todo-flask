@@ -29,15 +29,26 @@ class UpdateHabitSchema(Schema):
     description = fields.Str()
 
 
-class PlainUserSchema(Schema):
+class RegistrationSchema(Schema):
     username = fields.Str(required=True)
     email = fields.Email(required=True)
     password = fields.Str(required=True, load_only=True)
 
 
-class UserSchema(PlainUserSchema):
+class LoginSchema(Schema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
+
+
+class UserSchema(Schema):
     id = fields.Str(dump_only=True)
     habits = fields.List(fields.Nested(HabitSchema()))
+
+
+class PlainUserSchema(UserSchema):
+    username = fields.Str(dump_only=True)
+    email = fields.Email(dump_only=True)
+    password = fields.Str(dump_only=True)
 
 
 class PlainHabitCompletionSchema(Schema):

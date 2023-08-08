@@ -1,8 +1,9 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import PlainUserSchema, UserSchema, HabitSchema
+from schemas import PlainUserSchema, UserSchema, HabitSchema, LoginSchema
 from passlib.hash import pbkdf2_sha256 as sha256
+from flask_jwt_extended import create_access_token
 
 import uuid
 
@@ -27,12 +28,23 @@ class UserRegister(MethodView):
             password=sha256.hash(user_data["password"]),
         )
 
-        print("user: ", user)
-
         db.session.add(user)
         db.session.commit()
 
         return {"message": "User created successfully."}, 201
+
+
+@bp.route("/login")
+class UserLogin(MethodView):
+    @bp.arguments(LoginSchema)
+    def post(self, user_data):
+        user = UserModel.query.filter_by(username=user_data["username"]).first()
+
+        if user and sha256.verify(user_data["password"], user.password):
+            access_token = create_access_token(identity=user.id, fresh=True)
+            return {"access_token": access_token}, 200
+        else:
+            abort(401, message="Invalid credentials.")
 
 
 @bp.route("/users/<int:user_id>")
