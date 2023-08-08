@@ -8,6 +8,8 @@ from resources.habit import bp as HabitBlueprint
 from resources.user import bp as UserBlueprint
 from resources.habit_completion import bp as HabitCompletionBlueprint
 
+from blocklist import BLOCKLIST
+
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -32,6 +34,19 @@ def create_app(db_url=None):
 
     with app.app_context():
         db.create_all()
+
+    @jwt.token_in_blocklist_loader
+    def check_if_token_in_blocklist(jwt_header, jwt_payload):
+        return jwt_payload["jti"] in BLOCKLIST
+
+    @jwt.revoked_token_loader
+    def revoked_token_loader(jwt_header, jwt_payload):
+        return (
+            jsonify(
+                {"message": "The token has been revoked.", "error": "token_revoked"}
+            ),
+            401,
+        )
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
