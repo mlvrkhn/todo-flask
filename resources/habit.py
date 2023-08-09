@@ -18,7 +18,7 @@ class Habit(MethodView):
     def get(self):
         return HabitModel.query.all()
 
-    @jwt_required()
+    @jwt_required(fresh=True)
     @bp.arguments(HabitSchema)
     @bp.response(201, HabitSchema)
     def post(self, habit_data):

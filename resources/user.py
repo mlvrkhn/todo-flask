@@ -8,6 +8,7 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt,
     create_refresh_token,
+    get_jwt_identity,
 )
 
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
@@ -51,6 +52,15 @@ class UserLogin(MethodView):
             return {"access_token": access_token, "refresh_token": refresh_token}, 200
         else:
             abort(401, message="Invalid credentials.")
+
+
+@bp.route("/refresh")
+class TokenRefresh(MethodView):
+    @jwt_required(refresh=True)
+    def post(self):
+        user_id = get_jwt_identity()
+        new_token = create_access_token(identity=user_id, fresh=False)
+        return {"access_token": new_token}, 200
 
 
 @bp.route("/logout")
