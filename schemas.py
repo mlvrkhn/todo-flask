@@ -42,6 +42,7 @@ class LoginSchema(Schema):
 
 class UserSchema(Schema):
     id = fields.Str(dump_only=True)
+    description = fields.Str()
     habits = fields.List(fields.Nested(HabitSchema()))
 
 

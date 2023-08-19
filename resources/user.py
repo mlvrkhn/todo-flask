@@ -21,12 +21,19 @@ from blocklist import BLOCKLIST
 bp = Blueprint("user", __name__, description="Operations on users")
 
 
+@bp.route("/test")
+class UserRegister(MethodView):
+    def post(self):
+        return {"message": "User created successfully."}, 201
+
+
 @bp.route("/register")
 class UserRegister(MethodView):
     @bp.arguments(UserSchema)
     def post(self, user_data):
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists.")
+        print("test", user_data)
 
         user = UserModel(
             username=user_data["username"],

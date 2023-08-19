@@ -10,7 +10,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-
+    description = db.Column(db.String)
     # Define a one-to-many relationship with Habit
     habits = relationship(
         "HabitModel", back_populates="user", cascade="all, delete", lazy="dynamic"
