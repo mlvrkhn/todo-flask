@@ -23,17 +23,19 @@ bp = Blueprint("user", __name__, description="Operations on users")
 
 @bp.route("/test")
 class UserRegister(MethodView):
-    def post(self):
+    @bp.arguments(UserSchema)
+    def post(self, user_data):
+        # print("test", request.get_json())
+        print("test", user_data)
         return {"message": "User created successfully."}, 201
 
 
 @bp.route("/register")
 class UserRegister(MethodView):
-    @bp.arguments(UserSchema)
+    @bp.arguments(PlainUserSchema)
     def post(self, user_data):
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists.")
-        print("test", user_data)
 
         user = UserModel(
             username=user_data["username"],

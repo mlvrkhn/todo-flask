@@ -40,16 +40,16 @@ class LoginSchema(Schema):
     password = fields.Str(required=True, load_only=True)
 
 
-class UserSchema(Schema):
+class PlainUserSchema(Schema):
+    username = fields.Str(required=True)
+    email = fields.Email(required=True)
+    password = fields.Str(required=True)
+
+
+class UserSchema(PlainUserSchema):
     id = fields.Str(dump_only=True)
     description = fields.Str()
     habits = fields.List(fields.Nested(HabitSchema()))
-
-
-class PlainUserSchema(UserSchema):
-    username = fields.Str(dump_only=True)
-    email = fields.Email(dump_only=True)
-    password = fields.Str(dump_only=True)
 
 
 class PlainHabitCompletionSchema(Schema):
