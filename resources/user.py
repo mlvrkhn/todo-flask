@@ -25,9 +25,7 @@ bp = Blueprint("user", __name__, description="Operations on users")
 class UserRegister(MethodView):
     @bp.arguments(UserSchema)
     def post(self, user_data):
-        # print("test", request.get_json())
-        print("test", user_data)
-        return {"message": "User created successfully."}, 201
+        return {"message": "User created successfully.", "data": user_data}, 201
 
 
 @bp.route("/register")
