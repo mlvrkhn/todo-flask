@@ -6,7 +6,7 @@ class HabitCompletionModel(db.Model):
     __tablename__ = "habit_completions"
 
     id = db.Column(db.Integer, primary_key=True)
-    habit_id = db.Column(db.String, db.ForeignKey("habits.id"), nullable=False)
+    habit_id = db.Column(db.Integer, db.ForeignKey("habits.id"), nullable=False)
     completion_date = db.Column(db.Date, nullable=False, default=db.func.current_date())
     habit = relationship("HabitModel", back_populates="completions")
 

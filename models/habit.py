@@ -8,7 +8,7 @@ class HabitModel(db.Model):
     __tablename__ = "habits"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.String(255))
     time_created = db.Column(db.DateTime(timezone=True), server_default=func.now())
